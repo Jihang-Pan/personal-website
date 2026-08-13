@@ -1,0 +1,161 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-10T09:50:00.000Z",
+  "title": "Design System: Jihang Pan Personal Website",
+  "extensions": {
+    "colorMeta": {
+      "signal-green": {
+        "role": "primary",
+        "displayName": "信号绿",
+        "canonical": "oklch(76.5% 0.177 163.223)",
+        "tonalRamp": [
+          "oklch(15% 0.05 163.223)",
+          "oklch(25% 0.075 163.223)",
+          "oklch(35% 0.10 163.223)",
+          "oklch(45% 0.125 163.223)",
+          "oklch(55% 0.145 163.223)",
+          "oklch(65% 0.16 163.223)",
+          "oklch(76.5% 0.177 163.223)",
+          "oklch(92% 0.08 163.223)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "墨黑",
+        "canonical": "oklch(20.5% 0 none)",
+        "tonalRamp": [
+          "oklch(15% 0 none)",
+          "oklch(20.5% 0 none)",
+          "oklch(32% 0 none)",
+          "oklch(44% 0 none)",
+          "oklch(56% 0 none)",
+          "oklch(70% 0 none)",
+          "oklch(84% 0 none)",
+          "oklch(97% 0 none)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "纸白",
+        "canonical": "oklch(97% 0 none)",
+        "tonalRamp": [
+          "oklch(15% 0 none)",
+          "oklch(25% 0 none)",
+          "oklch(38% 0 none)",
+          "oklch(52% 0 none)",
+          "oklch(66% 0 none)",
+          "oklch(78% 0 none)",
+          "oklch(89% 0 none)",
+          "oklch(97% 0 none)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "像素显示",
+        "purpose": "品牌字标与短主标题。"
+      },
+      "body": {
+        "displayName": "中文长读",
+        "purpose": "文章正文与长段落。"
+      },
+      "label": {
+        "displayName": "工作台标签",
+        "purpose": "导航、日期、标签与状态。"
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "state-fast",
+        "value": "150ms ease-in-out",
+        "purpose": "颜色、描边、填充与按钮位移的状态反馈。"
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "首页和错误恢复路径的主动作。",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">阅读文章</a>",
+      "css": ".ds-btn-primary{display:inline-flex;min-height:48px;align-items:center;justify-content:center;border:2px solid var(--color-zag-dark);background:var(--color-zag-dark);color:var(--color-zag-light);padding:12px 16px;font:700 16px var(--font-mono);text-decoration:none;transition:transform 150ms ease-in-out}.ds-btn-primary:hover{transform:translate(-2px,-2px)}.ds-btn-primary:focus-visible{outline:2px solid currentColor;outline-offset:4px}"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "与主动作并列但保持透明表面的路径。",
+      "html": "<a class=\"ds-btn-secondary\" href=\"#\">浏览项目</a>",
+      "css": ".ds-btn-secondary{display:inline-flex;min-height:48px;align-items:center;justify-content:center;border:2px solid var(--color-zag-dark);background:transparent;color:var(--color-zag-dark);padding:12px 16px;font:700 16px var(--font-mono);text-decoration:none;transition:background 150ms ease-in-out,transform 150ms ease-in-out}.ds-btn-secondary:hover{background:var(--color-zag-accent-light);transform:translate(-2px,-2px)}.ds-btn-secondary:focus-visible{outline:2px solid currentColor;outline-offset:4px}"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "文章主题入口和项目元数据。",
+      "html": "<a class=\"ds-tag\" href=\"#\">#标签</a>",
+      "css": ".ds-tag{display:inline-flex;border:1px solid currentColor;padding:6px 9px;color:var(--color-zag-dark);font:700 12px var(--font-mono);text-decoration:none}.ds-tag:hover{background:var(--color-zag-accent-light)}.ds-tag:focus-visible{outline:2px solid currentColor;outline-offset:4px}"
+    },
+    {
+      "name": "Active Navigation",
+      "kind": "nav",
+      "description": "当前栏目使用黑白反转。",
+      "html": "<a class=\"ds-nav-active\" href=\"#\" aria-current=\"page\">文章</a>",
+      "css": ".ds-nav-active{display:inline-flex;min-height:44px;align-items:center;background:var(--color-zag-dark);color:var(--color-zag-light);padding:8px 12px;font:700 16px var(--font-mono);text-decoration:none}.ds-nav-active:focus-visible{outline:2px solid currentColor;outline-offset:4px}"
+    },
+    {
+      "name": "Brand Mark",
+      "kind": "custom",
+      "refersTo": "brand-mark",
+      "description": "页眉与页脚的紧凑 JP 标记。",
+      "html": "<span class=\"ds-brand-mark\">JP</span>",
+      "css": ".ds-brand-mark{display:inline-grid;width:36px;height:36px;place-items:center;border:2px solid var(--color-zag-dark);background:var(--color-zag-dark);color:var(--color-zag-light);font:400 10px var(--font-display)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "像素工作台",
+    "overview": "界面像一个持续使用的个人数字工作台：方正、直接、带有早期计算机界面的节奏，但不模拟破旧硬件或虚构材质。显示字体、硬边框、点阵头像和高对比主题建立记忆；文章正文主动退出视觉表演，让中文长读成为主要体验。",
+    "keyCharacteristics": [
+      "方角、硬线、零圆角",
+      "黑白反转的浅色与深色主题",
+      "少量信号绿，而非大面积彩色装饰",
+      "像素显示字体只承担品牌和短标题",
+      "中文正文使用长读 serif 字体和宽松行距"
+    ],
+    "rules": [
+      {
+        "name": "The Signal Rule",
+        "body": "绿色表示状态、响应或品牌焦点；普通内容结构保持黑白。",
+        "section": "colors"
+      },
+      {
+        "name": "The Two-Voice Rule",
+        "body": "像素字体负责识别，serif 正文负责阅读；不得把像素或等宽字体重新铺满长文章。",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Workbench Rule",
+        "body": "普通内容平铺在页面上，不为列表或文章添加浮动卡片和柔光阴影。",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do 用 2px 硬线、黑白反转和明确留白表达层级。",
+      "Do 在移动端保持 44px 触控目标、可见焦点和无横向溢出。",
+      "Do 让文章正文使用 serif 长读字体，代码与元数据使用等宽字体。",
+      "Do 把信号绿保留给品牌焦点与状态。"
+    ],
+    "donts": [
+      "Don't 添加圆角卡片、玻璃效果、渐变文字或柔光阴影。",
+      "Don't 在主标题上方添加 kicker、eyebrow 或无意义编号。",
+      "Don't 使用 emoji 或 Unicode 字符代替图标；继续使用同一套内联 SVG。",
+      "Don't 用像素字体排连续正文，或用两端对齐拉伸中文段落。"
+    ]
+  }
+}

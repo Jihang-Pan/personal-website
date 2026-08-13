@@ -1,25 +1,55 @@
 ---
 import { getConfigurationCollection } from "../../lib/utils";
+import Anchor from "../common/Anchor.astro";
+import ProfileFacts from "../ProfileFacts.astro";
 
 const { data: config } = await getConfigurationCollection();
 ---
 
-<div class="flex flex-col items-center sm:flex-row gap-8">
-  <img
-    src={config.hero.image}
-    alt={`${config.hero.title} Profile Image`}
-    class="rounded-full max-w-40 w-40 h-40 mb-4 z-0 grayscale"
-  />
-  <div>
-    <h1
-      class="text-3xl sm:text-4xl font-display font-semibold opsz text-center sm:text-left"
-    >
+<div id="about" class="hero-grid py-12 sm:py-16 lg:py-20">
+  <div class="hero-portrait" aria-hidden={!config.hero.image}>
+    {
+      config.hero.image ? (
+        <img
+          src={config.hero.image}
+          alt={`${config.personal.name} 的头像`}
+          width="224"
+          height="224"
+          fetchpriority="high"
+        />
+      ) : (
+        <div class="hero-monogram" aria-hidden="true">
+          <span>{config.personal.initials}</span>
+        </div>
+      )
+    }
+  </div>
+  <div class="hero-copy min-w-0">
+    <h1 class="hero-title font-display text-3xl leading-relaxed sm:text-5xl sm:leading-relaxed">
       {config.hero.title}
     </h1>
-    <h2
-      class="text-center text-xl sm:text-2xl font-mono font-medium sm:text-left"
-    >
-      <p set:html={config.hero.subtitle}/>
-    </h2>
+    <p class="hero-role mt-5 text-base font-bold leading-7 sm:text-lg">
+      {config.hero.subtitle}
+    </p>
+    <p class="mt-6 max-w-2xl font-serif text-lg leading-8 sm:text-xl sm:leading-9">
+      {config.hero.description}
+    </p>
+    <div class="mt-8 flex flex-wrap gap-4">
+      <Anchor
+        url={config.hero.primaryCtaUrl}
+        class="button-link button-link-primary"
+        plain
+      >
+        {config.hero.primaryCtaText}
+      </Anchor>
+      <Anchor
+        url={config.hero.secondaryCtaUrl}
+        class="button-link button-link-secondary"
+        plain
+      >
+        {config.hero.secondaryCtaText}
+      </Anchor>
+    </div>
   </div>
+  <ProfileFacts />
 </div>

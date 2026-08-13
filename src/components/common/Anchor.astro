@@ -3,30 +3,43 @@ export type Props = {
 	url: string;
 	class?: string;
 	external?: boolean;
+	showExternalIcon?: boolean;
+	current?: boolean;
+	plain?: boolean;
 	"aria-label"?: string;
 };
 
-const { url, external, class: className } = Astro.props;
+const {
+  url,
+  external = false,
+  showExternalIcon = true,
+  current = false,
+  plain = false,
+  class: className,
+} = Astro.props;
 ---
 
 <a
   href={url}
   class:list={[
-    "zag-offset underline font-medium flex items-center focus:outline-2 focus:outline-offset-2 focus:outline-zag-dark dark:focus:outline-zag-light",
+    "zag-offset font-medium inline-flex items-center focus:outline-2 focus:outline-offset-2 focus:outline-zag-dark dark:focus:outline-zag-light",
+    !plain && "underline",
     className,
   ]}
-  target={external ? "_blank" : "_self"}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
   aria-label={Astro.props["aria-label"]}
+  aria-current={current ? "page" : undefined}
 >
   <slot />
   {
-    external ? (
+    external && showExternalIcon ? (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        class="w-6 h-6"
+        class="ms-1 h-4 w-4"
         viewBox="0 0 512 512"
+        aria-hidden="true"
       >
-        <title>External link</title>
         <path
           class="zag-fill zag-transition"
           fill-rule="evenodd"

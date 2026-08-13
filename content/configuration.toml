@@ -1,57 +1,103 @@
-# Due to how Astro handles type inference with this structure,
-# we need to prefix all configuration keys with an underscore.
+# 上线前请把 baseUrl 替换为正式域名，并补充真实简介与社交账号。
 
 [_.site]
-baseUrl = "http://zaggonaut.dev"
+baseUrl = "http://localhost:4321"
+language = "zh-CN"
+locale = "zh-CN"
 
 [_.globalMeta]
-title = "Zaggonaut"
-description = "Retro-Inspired Theme & Built for Astro"
-longDescription = "Zaggonaut is a retro-inspired theme for Astro, built using TypeScript, TailwindCSS, and Astro."
-cardImage = "https://zaggonaut.dev/michael-dam-unsplash.webp"
-keywords = ["web development", "design", "technology"]
+title = "Jihang Pan — 写作、项目与生活"
+description = "Jihang Pan 的个人博客、项目、日常与旅游记录。"
+longDescription = "把思考写成文章，把想法做成项目，也记录日常与旅途。"
+keywords = ["个人博客", "项目", "写作", "日常", "旅游"]
 
 [_.blogMeta]
-title = "Zaggonaut Blog"
-description = "Practical wisdom, unfiltered thoughts, and hot takes."
-longDescription = "Web development, tech trends, and the occasional programming mishap."
-cardImage = "https://zaggonaut.dev/michael-dam-unsplash.webp"
-keywords = ["web development", "design", "technology"]
+title = "文章 — Jihang Pan"
+description = "Jihang Pan 的文章与长期写作。"
+longDescription = "按时间、标签与系列浏览文章，找到值得继续阅读的主题。"
+keywords = ["博客", "文章", "写作"]
 
 [_.projectMeta]
-title = "Zaggonaut Projects"
-description = "A list of my web development projects and developer tools."
-longDescription = "All of my projects, including both frontend and full-stack applications."
-cardImage = "https://zaggonaut.dev/michael-dam-unsplash.webp"
-keywords = ["web development", "design", "technology"]
+title = "项目 — Jihang Pan"
+description = "Jihang Pan 的项目记录。"
+longDescription = "项目、过程与实践细节。"
+keywords = ["项目", "作品集"]
+
+[_.archiveMeta]
+title = "归档 — Jihang Pan"
+description = "按年份浏览全部文章。"
+
+[_.tagMeta]
+title = "标签 — Jihang Pan"
+description = "按主题浏览文章。"
+
+[_.aboutMeta]
+title = "关于我 — Jihang Pan"
+description = "认识 Jihang Pan，一名生活在上海的后端开发工程师。"
+longDescription = "关于我的工作、兴趣，以及这个网站记录的内容。"
+keywords = ["后端开发", "上海", "个人介绍"]
 
 [_.notFoundMeta]
-title = "Zaggonaut 404"
-description = "The page you are looking for does not exist."
-longDescription = "The page you are looking for does not exist. Maybe it never existed. Spooky."
-cardImage = "https://zaggonaut.dev/michael-dam-unsplash.webp"
+title = "页面未找到 — Jihang Pan"
+description = "这个页面不存在，或者已经被移动。"
 
 [_.hero]
-title = "Zaggonaut"
-subtitle = "Retro-Inspired Theme &<br />Built for Astro"
-image = "https://zaggonaut.dev/michael-dam-unsplash.webp"
-ctaText = "View Projects"
-ctaUrl = "/projects"
+title = "Jihang Pan"
+subtitle = "后端开发工程师 / 上海"
+description = "你好，我是 Jihang Pan。这里记录我的写作、项目、日常与旅行。"
+image = "/jihang-avatar.png"
+primaryCtaText = "阅读文章"
+primaryCtaUrl = "/blog"
+secondaryCtaText = "关于我"
+secondaryCtaUrl = "/about"
 
 [_.personal]
-name = "Zaggonaut"
-githubProfile = "https://github.com/RATIU5/zaggonaut"
-twitterProfile = "https://twitter.com"
-linkedinProfile = "https://linkedin.com/"
+name = "Jihang Pan"
+initials = "JP"
+role = "后端开发工程师"
+location = "上海，中国"
+interests = ["看剧", "游戏", "记录"]
+bio = "我是一名生活在上海的后端开发工程师。工作之外，我喜欢看剧、打游戏，也习惯用文字记录思考、日常与旅途。"
+email = "panjihang96@gmail.com"
+githubProfile = "https://github.com/Jihang-Pan"
 
 [_.texts]
-articlesName = "Articles"
-projectsName = "Projects"
-viewAll = "View All"
-noArticles = "No articles found."
-noProjects = "No projects found."
+articlesName = "文章"
+projectsName = "项目"
+archiveName = "归档"
+tagsName = "标签"
+viewAll = "查看全部"
+readArticle = "阅读文章"
+viewProject = "查看项目"
+noArticles = "第一篇文章正在路上。"
+noProjects = "项目记录将在这里出现。"
+minutesToRead = "分钟阅读"
+updatedAt = "更新于"
+previousArticle = "上一篇"
+nextArticle = "下一篇"
+relatedArticles = "继续阅读"
+backToBlog = "返回文章列表"
 
-[_.menu]
-home = "/"
-projects = "/projects"
-blog = "/blog"
+[[_.menu]]
+label = "首页"
+url = "/"
+
+[[_.menu]]
+label = "文章"
+url = "/blog"
+
+[[_.menu]]
+label = "项目"
+url = "/projects"
+
+[[_.menu]]
+label = "日常"
+url = "/daily"
+
+[[_.menu]]
+label = "旅游"
+url = "/travel"
+
+[[_.menu]]
+label = "关于"
+url = "/about"

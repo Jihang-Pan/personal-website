@@ -1,0 +1,19 @@
+---
+type Props = {
+  title: string;
+  description?: string;
+};
+
+const { title, description } = Astro.props;
+---
+
+<header class="page-heading zag-border-b zag-transition pt-10 pb-8 sm:pt-14 sm:pb-10">
+  <h1 class="font-display text-2xl leading-relaxed sm:text-4xl sm:leading-relaxed">
+    {title}
+  </h1>
+  {description && (
+    <p class="mt-4 max-w-2xl text-base leading-8 zag-muted sm:text-lg">
+      {description}
+    </p>
+  )}
+</header>

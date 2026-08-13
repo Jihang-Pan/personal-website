@@ -1,4 +1,6 @@
 ---
+import SEO from "../components/SEO.astro";
+import Anchor from "../components/common/Anchor.astro";
 import Section from "../components/common/Section.astro";
 import Layout from "../layouts/Layout.astro";
 import { getConfigurationCollection } from "../lib/utils";
@@ -8,53 +10,27 @@ const { data: config } = await getConfigurationCollection();
 
 <Layout>
   <Fragment slot="head">
-    <title>{config.notFoundMeta.title}</title>
-    <meta
-      name="description"
-      content={config.notFoundMeta.longDescription ??
-        config.notFoundMeta.description}
+    <SEO
+      title={config.notFoundMeta.title}
+      description={config.notFoundMeta.description}
+      canonicalPath="/404"
     />
-    <meta property="og:title" content={config.notFoundMeta.title} />
-    <meta property="og:description" content={config.notFoundMeta.description} />
-    {
-      config.notFoundMeta.keywords && (
-        <meta
-          name="keywords"
-          content={config.notFoundMeta.keywords.join(", ")}
-        />
-      )
-    }
-    {
-      config.notFoundMeta.cardImage && (
-        <meta property="og:image" content={config.notFoundMeta.cardImage} />
-      )
-    }
-    <meta property="og:url" content={config.site.baseUrl} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={config.notFoundMeta.title} />
-    <meta
-      name="twitter:description"
-      content={config.notFoundMeta.description}
-    />
-    {
-      config.notFoundMeta.cardImage && (
-        <meta name="twitter:image" content={config.notFoundMeta.cardImage} />
-      )
-    }
-    <meta http-equiv="content-language" content="en" />
-    <meta name="language" content="English" />
-    <link rel="canonical" href={config.site.baseUrl} />
+    <meta name="robots" content="noindex" />
   </Fragment>
-  <Section class="mt-16">
-    <h1 class="text-3xl sm:text-4xl font-display pb-8">
-      Well, this is awkward
+  <Section class="py-16 sm:py-24">
+    <h1 class="font-display text-3xl leading-relaxed sm:text-5xl sm:leading-relaxed">
+      404 / 页面走丢了
     </h1>
-    <h2 class="text-xl sm:text-2xl pb-8">404 - Page not found</h2>
-    <p>
-      It seems that this page does not exist. If you want to return to safety, <a
-        class="underline underline-offset-4 font-medium"
-        href="/">click here to go home</a
-      >.
+    <p class="mt-6 max-w-xl text-lg leading-8 zag-muted">
+      {config.notFoundMeta.description}
     </p>
+    <div class="mt-8 flex flex-wrap gap-4">
+      <Anchor url="/" class="button-link button-link-primary" plain>
+        返回首页
+      </Anchor>
+      <Anchor url="/blog" class="button-link button-link-secondary" plain>
+        浏览文章
+      </Anchor>
+    </div>
   </Section>
 </Layout>

@@ -7,6 +7,7 @@ cardImage: "https://zaggonaut.dev/michael-dam-unsplash.webp"
 tags: ["code", "html"]
 readTime: 4
 featured: true
+draft: true
 timestamp: 2024-12-18T02:39:03+00:00
 ---
 

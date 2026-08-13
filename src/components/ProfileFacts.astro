@@ -1,0 +1,45 @@
+---
+import { getConfigurationCollection } from "../lib/utils";
+import Anchor from "./common/Anchor.astro";
+
+type Props = {
+  headingLevel?: "h2" | "h3";
+};
+
+const { headingLevel = "h2" } = Astro.props;
+const { data: config } = await getConfigurationCollection();
+const Heading = headingLevel;
+const facts = [
+  { label: "BASE", value: config.personal.location },
+  { label: "ROLE", value: config.personal.role },
+  { label: "INTEREST", value: config.personal.interests.join(" / ") },
+];
+---
+
+<aside class="profile-facts" aria-labelledby="profile-facts-heading">
+  <Heading id="profile-facts-heading" class="profile-facts-title">
+    QUICK FILE
+  </Heading>
+  <dl class="profile-facts-list">
+    {
+      facts.map((fact) => (
+        <div class="profile-fact">
+          <dt>{fact.label}</dt>
+          <dd>{fact.value}</dd>
+        </div>
+      ))
+    }
+    {
+      config.personal.email && (
+        <div class="profile-fact">
+          <dt>EMAIL</dt>
+          <dd>
+            <Anchor url={`mailto:${config.personal.email}`}>
+              {config.personal.email}
+            </Anchor>
+          </dd>
+        </div>
+      )
+    }
+  </dl>
+</aside>

@@ -1,7 +1,9 @@
 ---
+import SEO from "../components/SEO.astro";
+import Prose from "../components/Prose.astro";
 import Anchor from "../components/common/Anchor.astro";
 import Section from "../components/common/Section.astro";
-import Prose from "../components/Prose.astro";
+import TagList from "../components/common/TagList.astro";
 import type { ProjectFrontmatter } from "../lib/types";
 import { getConfigurationCollection, processArticleDate } from "../lib/utils";
 import Layout from "./Layout.astro";
@@ -14,83 +16,60 @@ const { data: config } = await getConfigurationCollection();
 
 <Layout>
   <Fragment slot="head">
-    <title>{`${frontmatter.title} • ${config.personal.name}`}</title>
-    <meta
-      name="description"
-      content={frontmatter.longDescription ?? frontmatter.description}
+    <SEO
+      title={`${frontmatter.title} — ${config.personal.name}`}
+      description={frontmatter.longDescription ?? frontmatter.description}
+      canonicalPath={`/projects/${frontmatter.slug}`}
+      image={frontmatter.cardImage}
+      tags={frontmatter.tags}
     />
-    <meta
-      property="og:title"
-      content={`${frontmatter.title} • ${config.personal.name}`}
-    />
-    <meta property="og:description" content={frontmatter.description} />
-    {
-      frontmatter.tags && (
-        <meta name="keywords" content={frontmatter.tags.join(", ")} />
-      )
-    }
-    {
-      frontmatter.cardImage && (
-        <meta property="og:image" content={frontmatter.cardImage} />
-      )
-    }
-    <meta
-      property="og:url"
-      content={`${config.site.baseUrl}/projects/${frontmatter.slug}`}
-    />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content={`${frontmatter.title} • ${config.personal.name}`}
-    />
-    <meta name="twitter:description" content={frontmatter.description} />
-    {
-      frontmatter.cardImage && (
-        <meta name="twitter:image" content={frontmatter.cardImage} />
-      )
-    }
-    <meta http-equiv="content-language" content="en" />
-    <meta name="language" content="English" />
-    <link
-      rel="canonical"
-      href={`${config.site.baseUrl}/projects/${frontmatter.slug}`}
-    />
+    {frontmatter.draft && <meta name="robots" content="noindex, nofollow" />}
   </Fragment>
-  <Section class="mt-8">
-    <div class="flex flex-col gap-4 mt-8 mb-16">
-      <h1 class="text-3xl sm:text-4xl leading-tight font-display">
-        {frontmatter.title}
-      </h1>
-      <div class="flex flex-wrap text-sm gap-2">
+  <article>
+    <Section class="pt-8 pb-16 sm:pt-12">
+      <Anchor url="/projects" class="text-sm">← 返回项目列表</Anchor>
+      <header class="zag-border-b zag-transition mt-8 pb-8 sm:mt-10 sm:pb-10">
+        {frontmatter.draft && <p class="draft-badge mb-5 w-fit">草稿预览</p>}
+        <h1 class="article-title font-display text-2xl leading-relaxed sm:text-4xl sm:leading-relaxed">
+          {frontmatter.title}
+        </h1>
+        <p class="mt-5 text-lg leading-8 zag-muted">{frontmatter.description}</p>
+        <div class="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm zag-muted">
+          <time datetime={frontmatter.timestamp.toISOString()}>
+            {processArticleDate(frontmatter.timestamp, config.site.locale)}
+          </time>
+          {
+            frontmatter.updatedAt && (
+              <span>
+                {config.texts.updatedAt}{" "}
+                {processArticleDate(frontmatter.updatedAt, config.site.locale)}
+              </span>
+            )
+          }
+        </div>
+        <div class="mt-5">
+          <TagList tags={frontmatter.tags} linked={false} label="项目标签" />
+        </div>
         {
-          frontmatter.tags
-            ? frontmatter.tags.map((tag) => (
-                <span class="-zag-text -zag-bg zag-transition font-semibold py-1 px-2">
-                  {tag}
-                </span>
-              ))
-            : null
+          (frontmatter.githubUrl || frontmatter.liveDemoUrl) && (
+            <div class="mt-6 flex flex-wrap gap-5">
+              {frontmatter.githubUrl && (
+                <Anchor url={frontmatter.githubUrl} external>
+                  查看 GitHub
+                </Anchor>
+              )}
+              {frontmatter.liveDemoUrl && (
+                <Anchor url={frontmatter.liveDemoUrl} external>
+                  打开演示
+                </Anchor>
+              )}
+            </div>
+          )
         }
-      </div>
-      <div class="flex gap-2">
-        {
-          frontmatter.githubUrl ? (
-            <Anchor url={frontmatter.githubUrl} class="text-base" external>
-              GitHub
-            </Anchor>
-          ) : null
-        }
-        {
-          frontmatter.liveDemoUrl ? (
-            <Anchor url={frontmatter.liveDemoUrl} class="text-base" external>
-              Demo
-            </Anchor>
-          ) : null
-        }
-      </div>
-    </div>
-    <Prose>
-      <slot />
-    </Prose>
-  </Section>
+      </header>
+      <Prose class="py-10 sm:py-14">
+        <slot />
+      </Prose>
+    </Section>
+  </article>
 </Layout>

@@ -1,76 +1,185 @@
 ---
-import Section from "../components/common/Section.astro";
+import type { CollectionEntry } from "astro:content";
+import SEO from "../components/SEO.astro";
+import ArticleSnippet from "../components/ArticleSnippet.astro";
 import Prose from "../components/Prose.astro";
+import Anchor from "../components/common/Anchor.astro";
+import Section from "../components/common/Section.astro";
+import TagList from "../components/common/TagList.astro";
 import type { ArticleFrontmatter } from "../lib/types";
 import { getConfigurationCollection, processArticleDate } from "../lib/utils";
 import Layout from "./Layout.astro";
 
-type Props = { frontmatter: ArticleFrontmatter };
+type ArticleData = CollectionEntry<"blog">["data"];
+type Heading = { depth: number; slug: string; text: string };
+type Props = {
+  frontmatter: ArticleFrontmatter;
+  previous?: ArticleData;
+  next?: ArticleData;
+  related?: ArticleData[];
+  headings?: Heading[];
+};
 
-const { frontmatter } = Astro.props;
-const articleDate = processArticleDate(frontmatter.timestamp);
+const {
+  frontmatter,
+  previous,
+  next,
+  related = [],
+  headings = [],
+} = Astro.props;
 const { data: config } = await getConfigurationCollection();
+const articleDate = processArticleDate(
+  frontmatter.timestamp,
+  config.site.locale,
+);
+const tocHeadings = headings.filter(({ depth }) => depth === 2 || depth === 3);
 ---
 
-<Layout>
+<Layout lang={frontmatter.language}>
   <Fragment slot="head">
-    <title>{`${frontmatter.title} • ${config.personal.name}`}</title>
-    <meta
-      name="description"
-      content={frontmatter.longDescription ?? frontmatter.description}
+    <SEO
+      title={`${frontmatter.title} — ${config.personal.name}`}
+      description={frontmatter.longDescription ?? frontmatter.description}
+      canonicalPath={`/blog/${frontmatter.slug}`}
+      image={frontmatter.cardImage}
+      type="article"
+      publishedTime={frontmatter.timestamp}
+      modifiedTime={frontmatter.updatedAt}
+      tags={frontmatter.tags}
     />
-    <meta
-      property="og:title"
-      content={`${frontmatter.title} • ${config.personal.name}`}
-    />
-    <meta property="og:description" content={frontmatter.description} />
-    {
-      frontmatter.tags && (
-        <meta name="keywords" content={frontmatter.tags.join(", ")} />
-      )
-    }
-    {
-      frontmatter.cardImage && (
-        <meta property="og:image" content={frontmatter.cardImage} />
-      )
-    }
-    <meta
-      property="og:url"
-      content={`${config.site.baseUrl}/blog/${frontmatter.slug}`}
-    />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content={`${frontmatter.title} • ${config.personal.name}`}
-    />
-    <meta name="twitter:description" content={frontmatter.description} />
-    {
-      frontmatter.cardImage && (
-        <meta name="twitter:image" content={frontmatter.cardImage} />
-      )
-    }
-    <meta http-equiv="content-language" content="en" />
-    <meta name="language" content="English" />
-    <link
-      rel="canonical"
-      href={`${config.site.baseUrl}/blog/${frontmatter.slug}`}
-    />
+    {frontmatter.draft && <meta name="robots" content="noindex, nofollow" />}
   </Fragment>
-  <Section class="pt-8">
-    <div class="flex flex-col gap-4 mt-8 mb-16">
-      <h1
-        class="text-3xl sm:text-4xl leading-normal sm:leading-normal font-display"
-      >
-        {frontmatter.title}
-      </h1>
-      <div class="flex justify-between">
-        <span>{articleDate}</span>
-        <span>{frontmatter.readTime} min</span>
-      </div>
-    </div>
-    <Prose>
-      <slot />
-    </Prose>
-    <p class="pt-8">~{config.personal.name}</p>
-  </Section>
+  <article>
+    <Section class="pt-8 sm:pt-12">
+      <Anchor url="/blog" class="text-sm">← {config.texts.backToBlog}</Anchor>
+      <header class="zag-border-b zag-transition mt-8 pb-8 sm:mt-10 sm:pb-10">
+        {frontmatter.draft && <p class="draft-badge mb-5 w-fit">草稿预览</p>}
+        <h1 class="article-title font-display text-2xl leading-relaxed sm:text-4xl sm:leading-relaxed">
+          {frontmatter.title}
+        </h1>
+        <p class="mt-5 text-lg leading-8 zag-muted">{frontmatter.description}</p>
+        <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm zag-muted">
+          <time datetime={frontmatter.timestamp.toISOString()}>{articleDate}</time>
+          {
+            frontmatter.readTime && (
+              <span>{frontmatter.readTime} {config.texts.minutesToRead}</span>
+            )
+          }
+          {
+            frontmatter.updatedAt && (
+              <span>
+                {config.texts.updatedAt}{" "}
+                {processArticleDate(frontmatter.updatedAt, config.site.locale)}
+              </span>
+            )
+          }
+          {frontmatter.series && <span>系列：{frontmatter.series}</span>}
+        </div>
+        <div class="mt-5">
+          <TagList tags={frontmatter.tags} />
+        </div>
+      </header>
+
+      {
+        tocHeadings.length >= 3 && (
+          <details class="toc zag-border-b zag-transition py-6">
+            <summary class="cursor-pointer font-semibold">本文目录</summary>
+            <ol class="mt-4 space-y-2 text-sm">
+              {tocHeadings.map((heading) => (
+                <li class:list={[heading.depth === 3 && "ps-5"]}>
+                  <Anchor url={`#${heading.slug}`}>{heading.text}</Anchor>
+                </li>
+              ))}
+            </ol>
+          </details>
+        )
+      }
+
+      <Prose class="py-10 sm:py-14">
+        <slot />
+      </Prose>
+
+      <footer class="pb-12">
+        <section class="author-note zag-border-b zag-transition py-8">
+          <div class="pixel-avatar" aria-hidden="true">
+            {config.personal.initials}
+          </div>
+          <div>
+            <h2 class="font-display text-sm leading-loose">
+              {frontmatter.author ?? config.personal.name}
+            </h2>
+            <p class="mt-2 leading-7 zag-muted">
+              这里收录文章与项目，也保留它们形成过程中的判断与细节。
+            </p>
+          </div>
+        </section>
+
+        {
+          (previous || next) && (
+            <nav
+              class="grid gap-6 py-8 sm:grid-cols-2"
+              aria-label="相邻文章"
+            >
+              <div>
+                {previous && (
+                  <>
+                    <p class="mb-2 text-xs zag-muted">
+                      {config.texts.previousArticle}
+                    </p>
+                    <Anchor url={`/blog/${previous.slug}`}>
+                      {previous.title}
+                    </Anchor>
+                  </>
+                )}
+              </div>
+              <div class="sm:text-right">
+                {next && (
+                  <>
+                    <p class="mb-2 text-xs zag-muted">
+                      {config.texts.nextArticle}
+                    </p>
+                    <Anchor
+                      url={`/blog/${next.slug}`}
+                      class="sm:justify-end"
+                    >
+                      {next.title}
+                    </Anchor>
+                  </>
+                )}
+              </div>
+            </nav>
+          )
+        }
+
+        {
+          related.length > 0 && (
+            <section class="pt-8" aria-labelledby="related-heading">
+              <h2
+                id="related-heading"
+                class="font-display text-base leading-loose"
+              >
+                {config.texts.relatedArticles}
+              </h2>
+              <ul class="mt-6 space-y-8">
+                {related.map((article) => (
+                  <li>
+                    <ArticleSnippet
+                      title={article.title}
+                      description={article.description}
+                      duration={article.readTime}
+                      url={`/blog/${article.slug}`}
+                      timestamp={article.timestamp}
+                      tags={article.tags}
+                      draft={article.draft}
+                      headingLevel="h3"
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </footer>
+    </Section>
+  </article>
 </Layout>

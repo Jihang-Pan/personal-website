@@ -1,50 +1,58 @@
 ---
 import Anchor from "./common/Anchor.astro";
+import TagList from "./common/TagList.astro";
 
 export type Props = {
-	title: string;
-	description: string;
-	url: string;
-	githubUrl?: string;
-	liveUrl?: string;
-	tags: string[];
+  title: string;
+  description: string;
+  url: string;
+  githubUrl?: string;
+  liveUrl?: string;
+  tags: string[];
+  draft?: boolean;
+  headingLevel?: "h2" | "h3";
 };
 
-const { title, description, url, githubUrl, liveUrl, tags } = Astro.props;
+const {
+  title,
+  description,
+  url,
+  githubUrl,
+  liveUrl,
+  tags,
+  draft = false,
+  headingLevel = "h2",
+} = Astro.props;
+const Heading = headingLevel;
 ---
 
-<div class="relative flex flex-col gap-3 mb-8 hover-zag-dotted-grid">
-  <div class="flex flex-col gap-3 sm:flex-row sm:justify-between">
-    <Anchor url={url} class="text-xl">
-      {title}
-    </Anchor>
-    <div class="flex gap-2">
-      {
-        githubUrl ? (
-          <Anchor url={githubUrl} class="text-base" external>
-            GitHub
-          </Anchor>
-        ) : null
-      }
-      {
-        liveUrl ? (
-          <Anchor url={liveUrl} class="text-base" external>
-            Live
-          </Anchor>
-        ) : null
-      }
+<article class="content-snippet relative flex flex-col gap-4 hover-zag-dotted-grid">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div class="flex flex-wrap items-center gap-3">
+      <Heading>
+        <Anchor url={url} class="snippet-title text-xl leading-8 sm:text-2xl" plain>
+          {title}
+        </Anchor>
+      </Heading>
+      {draft && <span class="draft-badge">草稿预览</span>}
     </div>
-  </div>
-  <p class="zag-text zag-transition">
-    {description}
-  </p>
-  <div class="flex flex-row flex-wrap gap-2">
     {
-      tags.map((tag) => (
-        <span class="-zag-text -zag-bg zag-transition px-2 py-1 text-sm font-semibold">
-          {tag}
-        </span>
-      ))
+      (githubUrl || liveUrl) && (
+        <div class="flex shrink-0 flex-wrap gap-4 text-sm">
+          {githubUrl && (
+            <Anchor url={githubUrl} external>
+              GitHub
+            </Anchor>
+          )}
+          {liveUrl && (
+            <Anchor url={liveUrl} external>
+              演示
+            </Anchor>
+          )}
+        </div>
+      )
     }
   </div>
-</div>
+  <p class="max-w-prose leading-7 zag-muted">{description}</p>
+  <TagList tags={tags} linked={false} label="项目标签" />
+</article>

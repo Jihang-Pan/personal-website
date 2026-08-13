@@ -1,0 +1,63 @@
+---
+import Anchor from "../components/common/Anchor.astro";
+import PageHeader from "../components/common/PageHeader.astro";
+import Section from "../components/common/Section.astro";
+import ProfileFacts from "../components/ProfileFacts.astro";
+import SEO from "../components/SEO.astro";
+import Layout from "../layouts/Layout.astro";
+import { getConfigurationCollection } from "../lib/utils";
+
+const { data: config } = await getConfigurationCollection();
+---
+
+<Layout>
+  <Fragment slot="head">
+    <SEO
+      title={config.aboutMeta.title}
+      description={config.aboutMeta.longDescription ?? config.aboutMeta.description}
+      canonicalPath="/about"
+      tags={config.aboutMeta.keywords}
+    />
+  </Fragment>
+  <Section wide class="pb-16 sm:pb-24">
+    <PageHeader
+      title="关于我"
+      description={config.aboutMeta.longDescription}
+    />
+    <div class="about-layout py-10 sm:py-14">
+      <div class="about-copy font-serif text-lg leading-9">
+        <p>你好，我是 {config.personal.name}。</p>
+        <p>{config.personal.bio}</p>
+        <p>
+          这个网站是我的个人记录空间：文章用来整理思考，项目保存实践过程，日常与旅游则留下工作之外的生活片段。
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4 font-mono text-base leading-normal">
+          {
+            config.personal.email && (
+              <Anchor
+                url={`mailto:${config.personal.email}`}
+                class="button-link button-link-primary"
+                plain
+              >
+                给我写邮件
+              </Anchor>
+            )
+          }
+          {
+            config.personal.githubProfile && (
+              <Anchor
+                url={config.personal.githubProfile}
+                class="button-link button-link-secondary"
+                external
+                plain
+              >
+                查看 GitHub
+              </Anchor>
+            )
+          }
+        </div>
+      </div>
+      <ProfileFacts headingLevel="h2" />
+    </div>
+  </Section>
+</Layout>

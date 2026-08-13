@@ -1,67 +1,99 @@
 ---
-import { getCollection } from "astro:content";
 import Section from "../components/common/Section.astro";
 import FeaturedArticles from "../components/home/FeaturedArticles.astro";
+import FeaturedChannel from "../components/home/FeaturedChannel.astro";
 import FeaturedProjects from "../components/home/FeaturedProjects.astro";
 import Hero from "../components/home/Hero.astro";
+import SEO from "../components/SEO.astro";
 import Layout from "../layouts/Layout.astro";
+import {
+  getPublishedArticles,
+  getPublishedProjects,
+} from "../lib/content";
 import { getConfigurationCollection } from "../lib/utils";
 
 const { data: config } = await getConfigurationCollection();
-
-const featuredProjects = (
-	await getCollection("project", (e) => e.data.featured)
-).map((e) => ({
-	...e.data,
-  url: `/projects/${e.data.slug}`,
-}));
+const [articles, projects] = await Promise.all([
+  getPublishedArticles(),
+  getPublishedProjects(),
+]);
+const channelTags = new Set(["日常", "旅游", "旅行"]);
+const generalArticles = articles.filter(
+  ({ data }) => !data.tags.some((tag) => channelTags.has(tag)),
+);
 const featuredArticles = (
-	await getCollection("blog", (e) => e.data.featured)
-).map((e) => ({
-	...e.data,
-  url: `/blog/${e.data.slug}`,
-}));
+  generalArticles.some(({ data }) => data.featured)
+    ? generalArticles.filter(({ data }) => data.featured)
+    : generalArticles
+)
+  .slice(0, 2)
+  .map(({ data }) => ({ ...data, url: `/blog/${data.slug}` }));
+const featuredProjects = (
+  projects.some(({ data }) => data.featured)
+    ? projects.filter(({ data }) => data.featured)
+    : projects
+)
+  .slice(0, 2)
+  .map(({ data }) => ({ ...data, url: `/projects/${data.slug}` }));
+const dailyArticles = articles
+  .filter(({ data }) => data.tags.includes("日常"))
+  .slice(0, 2)
+  .map(({ data }) => ({ ...data, url: `/blog/${data.slug}` }));
+const travelArticles = articles
+  .filter(({ data }) =>
+    data.tags.some((tag) => tag === "旅游" || tag === "旅行"),
+  )
+  .slice(0, 2)
+  .map(({ data }) => ({ ...data, url: `/blog/${data.slug}` }));
 ---
 
 <Layout>
   <Fragment slot="head">
-    <title>{config.globalMeta.title}</title>
-    <meta
-      name="description"
-      content={config.globalMeta.longDescription ?? config.globalMeta.description}
+    <SEO
+      title={config.globalMeta.title}
+      description={config.globalMeta.longDescription ?? config.globalMeta.description}
+      canonicalPath="/"
+      image={config.globalMeta.cardImage}
+      tags={config.globalMeta.keywords}
     />
-    <meta property="og:title" content={config.globalMeta.title} />
-    <meta
-      property="og:description"
-      content={config.globalMeta.description}
-    />
-    {config.globalMeta.keywords && (
-      <meta name="keywords" content={config.globalMeta.keywords.join(", ")} />
-    )}
-    {config.globalMeta.cardImage && (
-      <meta property="og:image" content={config.globalMeta.cardImage} />
-    )}
-    <meta property="og:url" content={config.site.baseUrl} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={config.globalMeta.title} />
-    <meta
-      name="twitter:description"
-      content={config.globalMeta.description}
-    />
-    {config.globalMeta.cardImage && (
-      <meta name="twitter:image" content={config.globalMeta.cardImage} />
-    )}
-    <meta http-equiv="content-language" content="en" />
-    <meta name="language" content="English" />
-    <link rel="canonical" href={config.site.baseUrl} />
   </Fragment>
-  <Section class="my-16">
-    <Hero />
-  </Section>
-  <Section>
-    <FeaturedProjects featuredProjects={featuredProjects} />
-  </Section>
-  <Section>
-    <FeaturedArticles featuredArticles={featuredArticles} />
-  </Section>
+  <div class="home-canvas">
+    <Section wide class="hero-section">
+      <Hero />
+    </Section>
+    <Section wide class="pb-16 sm:pb-24">
+      <div class="home-workbench zag-transition">
+        <div class="home-primary-grid">
+          <div class="home-panel home-panel-articles">
+            <FeaturedArticles featuredArticles={featuredArticles} />
+          </div>
+          <div class="home-panel home-panel-projects">
+            <FeaturedProjects featuredProjects={featuredProjects} />
+          </div>
+        </div>
+        <div class="home-secondary-grid">
+          <div class="home-panel">
+            <FeaturedChannel
+              id="featured-daily-heading"
+              title="日常"
+              url="/daily"
+              articles={dailyArticles}
+              emptyKicker="DAILY NOTES"
+              emptyMessage="第一篇日常记录正在路上。"
+            />
+          </div>
+          <div class="home-panel">
+            <FeaturedChannel
+              id="featured-travel-heading"
+              title="旅游"
+              url="/travel"
+              articles={travelArticles}
+              emptyKicker="TRAVEL NOTES"
+              emptyMessage="第一篇旅游记录正在路上。"
+            />
+          </div>
+        </div>
+      </div>
+    </Section>
+  </div>
 </Layout>

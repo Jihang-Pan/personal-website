@@ -27,3 +27,6 @@ pnpm-lock.yaml
 
 .vscode/
 .cursor/
+
+# local design review screenshots
+.impeccable/review/

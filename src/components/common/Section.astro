@@ -1,7 +1,18 @@
 ---
-const { class: className } = Astro.props;
+type Props = {
+  class?: string;
+  wide?: boolean;
+};
+
+const { class: className, wide = false } = Astro.props;
 ---
 
-<section class:list={["p-4 max-w-2xl mx-auto", className]}>
+<section
+  class:list={[
+    "px-4 sm:px-6 mx-auto w-full",
+    wide ? "site-shell" : "max-w-2xl",
+    className,
+  ]}
+>
   <slot />
 </section>

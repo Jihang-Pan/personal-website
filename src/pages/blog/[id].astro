@@ -1,29 +1,51 @@
 ---
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
 import BlogLayout from "../../layouts/BlogLayout.astro";
+import {
+  getPublishedArticles,
+  getRelatedArticles,
+} from "../../lib/content";
 import { getConfigurationCollection } from "../../lib/utils";
 
 export async function getStaticPaths() {
-	const posts = await getCollection("blog");
-	const { data: config } = await getConfigurationCollection();
-	return posts.map((article) => ({
-		params: { id: article.data.slug },
-		props: {
-			article: {
-				...article,
-				data: {
-					...article.data,
-					url: `${config.site.baseUrl}/blog/${article.data.slug}`,
-				},
-			},
-		},
-	}));
+  const articles = await getPublishedArticles();
+  const { data: config } = await getConfigurationCollection();
+
+  return Promise.all(
+    articles.map(async (article, index) => ({
+      params: { id: article.data.slug },
+      props: {
+        article: {
+          ...article,
+          data: {
+            ...article.data,
+            url: new URL(
+              `/blog/${article.data.slug}`,
+              config.site.baseUrl,
+            ).toString(),
+          },
+        },
+        previous: articles[index + 1]?.data,
+        next: articles[index - 1]?.data,
+        related: (await getRelatedArticles(
+          article.data.slug,
+          article.data.tags,
+        )).map((entry) => entry.data),
+      },
+    })),
+  );
 }
 
-const { article } = Astro.props;
-const { Content } = await render(article);
+const { article, previous, next, related } = Astro.props;
+const { Content, headings } = await render(article);
 ---
 
-<BlogLayout frontmatter={article.data}>
+<BlogLayout
+  frontmatter={article.data}
+  previous={previous}
+  next={next}
+  related={related}
+  headings={headings}
+>
   <Content />
 </BlogLayout>

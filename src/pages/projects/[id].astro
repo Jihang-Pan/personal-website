@@ -1,21 +1,27 @@
 ---
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
 import ProjectLayout from "../../layouts/ProjectLayout.astro";
+import { getPublishedProjects } from "../../lib/content";
+import { getConfigurationCollection } from "../../lib/utils";
 
 export async function getStaticPaths() {
-	const projects = await getCollection("project");
-	return projects.map((project) => ({
-		params: { id: project.data.slug },
-		props: {
-			project: {
-				...project,
-				data: {
-					...project.data,
-					url: `/projects/${project.data.slug}`,
-				},
-			},
-		},
-	}));
+  const projects = await getPublishedProjects();
+  const { data: config } = await getConfigurationCollection();
+  return projects.map((project) => ({
+    params: { id: project.data.slug },
+    props: {
+      project: {
+        ...project,
+        data: {
+          ...project.data,
+          url: new URL(
+            `/projects/${project.data.slug}`,
+            config.site.baseUrl,
+          ).toString(),
+        },
+      },
+    },
+  }));
 }
 
 const { project } = Astro.props;

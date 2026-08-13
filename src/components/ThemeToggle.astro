@@ -1,15 +1,17 @@
----
-
----
-
-<button class="border-none bg-none focus:outline-2 focus:outline-offset-2 focus:outline-zag-dark dark:focus:outline-zag-light" type="button" id="themeToggle" aria-label="Theme Toggle">
+<button
+  class="icon-link flex h-11 w-11 items-center justify-center"
+  type="button"
+  id="theme-toggle"
+  aria-label="切换到深色主题"
+  aria-pressed="false"
+>
   <svg
-    width="30px"
+    width="24"
+    height="24"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    name="Theme toggle"
+    aria-hidden="true"
   >
-    <title>Theme toggle</title>
     <path
       class="zag-transition fill-neutral-900 dark:fill-transparent"
       fill-rule="evenodd"
@@ -24,15 +26,26 @@
 </button>
 
 <script is:inline>
-  const handleToggleClick = () => {
-    const element = document.documentElement;
-    element.classList.toggle("dark");
+  (() => {
+    const button = document.getElementById("theme-toggle");
+    if (!(button instanceof HTMLButtonElement)) return;
 
-    const isDark = element.classList.contains("dark");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
-  };
+    const sync = () => {
+      const isDark = document.documentElement.classList.contains("dark");
+      button.setAttribute("aria-pressed", String(isDark));
+      button.setAttribute(
+        "aria-label",
+        isDark ? "切换到浅色主题" : "切换到深色主题",
+      );
+    };
 
-  document
-    .getElementById("themeToggle")
-    ?.addEventListener("click", handleToggleClick);
+    button.addEventListener("click", () => {
+      document.documentElement.classList.toggle("dark");
+      const isDark = document.documentElement.classList.contains("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      sync();
+    });
+
+    sync();
+  })();
 </script>

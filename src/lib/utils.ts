@@ -6,11 +6,10 @@ import { type CollectionEntry, getCollection } from "astro:content";
  * @param maxLength the maximum length of the shortened content (default is 20)
  * @returns a shortened version of the content
  */
-export const getShortDescription = (content: string, maxLength = 20) => {
-  const splitByWord = content.split(" ");
-  const length = splitByWord.length;
-  return length > maxLength
-    ? `${splitByWord.slice(0, maxLength).join(" ")}...`
+export const getShortDescription = (content: string, maxLength = 96) => {
+  const characters = Array.from(content.trim());
+  return characters.length > maxLength
+    ? `${characters.slice(0, maxLength).join("")}…`
     : content;
 };
 
@@ -19,12 +18,12 @@ export const getShortDescription = (content: string, maxLength = 20) => {
  * @param timestamp the timestamp to process
  * @returns a string representing the processed timestamp
  */
-export const processArticleDate = (date: Date) => {
-  const monthSmall = date.toLocaleString("default", { month: "short" });
-  const day = date.getDate();
-  const year = date.getFullYear();
-  return `${monthSmall} ${day}, ${year}`;
-};
+export const processArticleDate = (date: Date, locale = "zh-CN") =>
+  new Intl.DateTimeFormat(locale, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
 
 let configCache: CollectionEntry<"configuration"> | null = null;
 
@@ -48,3 +47,19 @@ export const getConfigurationCollection = async (): Promise<
   configCache = configs[0];
   return configs[0];
 };
+
+export const toAbsoluteUrl = (path: string, baseUrl: string) =>
+  new URL(path, baseUrl).toString();
+
+export const escapeXml = (value: string) =>
+  value.replace(
+    /[<>&'"]/g,
+    (character) =>
+      ({
+        "<": "&lt;",
+        ">": "&gt;",
+        "&": "&amp;",
+        "'": "&apos;",
+        '"': "&quot;",
+      })[character] ?? character,
+  );

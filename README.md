@@ -1,67 +1,71 @@
-![Zaggonaut, a retro-inspired theme for Astro.](./images/README.png)
+# Jihang Pan — 个人博客与项目站点
 
-Zaggonaut is a retro-inspired black & white theme for Astro, built using TypeScript, TailwindCSS, and of course, Astro.
+基于 Astro、TypeScript、Tailwind CSS 和 Content Collections 构建的静态个人站点。中文为默认语言，收录文章、项目、日常与旅游记录，并保留复古像素视觉。
 
-> [!NOTE]  
-> Introducing Zaggonaut 2.0!
-> This is a complete rewrite of the internal content layer, making use of Astro's new Content Collections feature, among other enhancements.
+## 本地运行
 
-If you are looking for the original Zaggonaut theme, you can find it [on the v1 branch](https://github.com/RATIU5/zaggonaut/tree/v1).
-
-## Getting Started
-
-[View the demo](https://zaggonaut.dev) or [view the source code](https://github.com/RATIU5/zaggonaut).
-
-Alternatively, you can create a new Astro project with Zaggonaut like this:
+项目使用 pnpm：
 
 ```bash
-# pnpm
-pnpm create astro@latest --template RATIU5/zaggonaut
+pnpm install
+pnpm dev
 ```
 
-> [!IMPORTANT]  
-> Currently, `pnpm` is the only supported package manager due to `npm` throwing peer-dependency conflicts.
+生产构建：
 
-## Features
+```bash
+pnpm build
+pnpm preview
+```
 
-- Content Collections
-- Dark & light mode
-- Customizable colors
-- 100 / 100 Lighthouse score
-- Fully accessible
-- Fully responsive
-- Type-safe
-- SEO-friendly
+## 首次配置
 
-## Customization
+编辑 `content/configuration.toml`：
 
-The entire theme is fully customizable. The theme is setup a specific way to make it easy to customize.
+- 把 `baseUrl` 换成正式域名；
+- 确认姓名、首页文案和 GitHub 地址；
+- 按需补充邮箱、头像和其他社交账号；
+- 调整导航、SEO 标题与描述。
 
-### Colors
+当前配置没有使用未经确认的履历、职业或个人照片。
 
-You can customize the colors of the theme by editing the `src/styles/global.css` file.
-This file uses Tailwind CSS and CSS variables to customize the colors of the theme.
-Zaggonaut uses the following CSS variables:
+## 发布文章
 
-- `--color-zag-dark`: The dark color of the theme
-- `--color-zag-light`: The light color of the theme
-- `--color-zag-dark-muted`: The dark color of the theme with a slight opacity
-- `--color-zag-light-muted`: The light color of the theme with a slight opacity
-- `--color-zag-accent-light`: The light accent color of the theme
-- `--color-zag-accent-light-muted`: The light accent color of the theme with a slight opacity
-- `--color-zag-accent-dark`: The dark accent color of the theme
-- `--color-zag-accent-dark-muted`: The dark accent color of the theme with a slight opacity
+在 `content/blogs/` 新建 Markdown 文件。可以复制 `content/templates/article.md`：
 
-### Content Customization
+```yaml
+---
+title: 文章标题
+slug: stable-english-slug
+description: 一句话摘要
+tags: ["标签"]
+readTime: 5
+featured: false
+draft: false
+timestamp: 2026-08-10T00:00:00+08:00
+---
+```
 
-95% of the content you'll want to customize will be located inside the `content` directory. Let's break down the specific files/directories you may want to edit:
+中文标题必须填写稳定的英文或数字 slug，例如 `building-my-blog`。草稿设置为 `draft: true` 后不会生成公开页面，也不会进入 RSS 和站点地图。
 
-- `content/configuration.toml`: This file contains the site configuration, such as metadata, social links, and text content.
+文章添加 `日常` 标签后会同时出现在 `/daily` 栏目；添加 `旅游`（或 `旅行`）标签后会同时出现在 `/travel` 栏目。
 
-- `content/blogs/`: This directory contains your blog posts. Each post is a Markdown file with metadata in the frontmatter at the top.
+开发服务器会显示草稿并标注“草稿预览”，方便本地检查；生产构建会自动排除草稿。
 
-- `content/projects/`: This directory contains your projects. Each project is a Markdown file also with metadata in the frontmatter.
+## 发布项目
 
-## Ready To Try?
+在 `content/projects/` 新建 Markdown 文件，或复制 `content/templates/project.md`。支持 GitHub、在线演示、标签、精选和草稿状态。
 
-Check out [the theme website](https://zaggonaut.dev) to give it a spin!
+## 自动生成页面
+
+- `/blog`：文章列表
+- `/projects`：项目列表
+- `/daily`：带有“日常”标签的文章
+- `/travel`：带有“旅游”或“旅行”标签的文章
+- `/about`：个人介绍、兴趣与联系方式
+- `/archive`：按年份归档
+- `/tags`：标签目录
+- `/rss.xml`：RSS
+- `/sitemap.xml`：站点地图
+
+模板自带的 HTML 示例文章与 Zaggonaut 示例项目已设为草稿，可作为字段参考，正式发布前可以删除。

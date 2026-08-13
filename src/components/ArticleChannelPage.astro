@@ -1,0 +1,77 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getPublishedArticles } from "../lib/content";
+import { getConfigurationCollection } from "../lib/utils";
+import ArticleSnippet from "./ArticleSnippet.astro";
+import Anchor from "./common/Anchor.astro";
+import PageHeader from "./common/PageHeader.astro";
+import Section from "./common/Section.astro";
+import SEO from "./SEO.astro";
+
+type Props = {
+  title: string;
+  description: string;
+  canonicalPath: string;
+  tags: string[];
+  emptyKicker: string;
+  emptyMessage: string;
+};
+
+const {
+  title,
+  description,
+  canonicalPath,
+  tags,
+  emptyKicker,
+  emptyMessage,
+} = Astro.props;
+const { data: config } = await getConfigurationCollection();
+const articles = (await getPublishedArticles()).filter((article) =>
+  article.data.tags.some((tag) => tags.includes(tag)),
+);
+---
+
+<Layout>
+  <Fragment slot="head">
+    <SEO
+      title={`${title} — ${config.personal.name}`}
+      description={description}
+      canonicalPath={canonicalPath}
+      tags={tags}
+    />
+  </Fragment>
+  <Section class="pb-16">
+    <PageHeader
+      title={title}
+      description={`${description} 共 ${articles.length} 篇。`}
+    />
+    <nav class="flex flex-wrap gap-x-6 gap-y-3 py-6" aria-label={`${title}栏目浏览`}>
+      <Anchor url="/blog">查看全部文章</Anchor>
+      <Anchor url="/tags">按标签浏览</Anchor>
+    </nav>
+    {
+      articles.length > 0 ? (
+        <ol class="divide-y-2 divide-zag-dark dark:divide-zag-light">
+          {articles.map((article) => (
+            <li class="py-8 first:pt-4">
+              <ArticleSnippet
+                title={article.data.title}
+                description={article.data.description}
+                duration={article.data.readTime}
+                url={`/blog/${article.data.slug}`}
+                timestamp={article.data.timestamp}
+                tags={article.data.tags}
+                draft={article.data.draft}
+              />
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <div class="empty-state my-10" role="status">
+          <p class="font-display text-sm leading-loose">{emptyKicker}</p>
+          <p class="mt-4 text-lg">{emptyMessage}</p>
+        </div>
+      )
+    }
+  </Section>
+</Layout>

@@ -1,0 +1,65 @@
+---
+import SEO from "../components/SEO.astro";
+import Anchor from "../components/common/Anchor.astro";
+import PageHeader from "../components/common/PageHeader.astro";
+import Section from "../components/common/Section.astro";
+import Layout from "../layouts/Layout.astro";
+import { getPublishedArticles } from "../lib/content";
+import { getConfigurationCollection, processArticleDate } from "../lib/utils";
+
+const articles = await getPublishedArticles();
+const { data: config } = await getConfigurationCollection();
+const groupedArticles = Object.entries(
+  Object.groupBy(articles, (article) => String(article.data.timestamp.getFullYear())),
+).sort(([yearA], [yearB]) => Number(yearB) - Number(yearA));
+---
+
+<Layout>
+  <Fragment slot="head">
+    <SEO
+      title={config.archiveMeta.title}
+      description={config.archiveMeta.description}
+      canonicalPath="/archive"
+    />
+  </Fragment>
+  <Section class="pb-16">
+    <PageHeader
+      title={config.texts.archiveName}
+      description={config.archiveMeta.description}
+    />
+    {
+      groupedArticles.length > 0 ? (
+        <div class="divide-y-2 divide-zag-dark dark:divide-zag-light">
+          {groupedArticles.map(([year, entries]) => (
+            <section class="grid gap-6 py-8 sm:grid-cols-[6rem_1fr]">
+              <h2 class="font-display text-xl leading-loose">{year}</h2>
+              <ol class="space-y-6">
+                {entries?.map((article) => (
+                  <li class="grid gap-2 sm:grid-cols-[8rem_1fr] sm:items-baseline">
+                    <time
+                      class="text-sm zag-muted"
+                      datetime={article.data.timestamp.toISOString()}
+                    >
+                      {processArticleDate(
+                        article.data.timestamp,
+                        config.site.locale,
+                      )}
+                    </time>
+                    <Anchor url={`/blog/${article.data.slug}`} class="text-lg">
+                      {article.data.title}
+                    </Anchor>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state my-10" role="status">
+          <p class="font-display text-sm leading-loose">EMPTY ARCHIVE</p>
+          <p class="mt-4 text-lg">{config.texts.noArticles}</p>
+        </div>
+      )
+    }
+  </Section>
+</Layout>
