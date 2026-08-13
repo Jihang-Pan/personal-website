@@ -10,14 +10,24 @@ type Props = {
   articles: Array<ArticleFrontmatter>;
   emptyKicker: string;
   emptyMessage: string;
+  headingLevel?: "h2" | "h3";
 };
 
-const { id, title, url, articles, emptyKicker, emptyMessage } = Astro.props;
+const {
+  id,
+  title,
+  url,
+  articles,
+  emptyKicker,
+  emptyMessage,
+  headingLevel = "h2",
+} = Astro.props;
+const Heading = headingLevel;
 ---
 
 <section aria-labelledby={id}>
   <div class="flex items-baseline justify-between gap-4">
-    <h2 id={id} class="section-tab">{title}</h2>
+    <Heading id={id} class="section-tab">{title}</Heading>
     <Anchor url={url} class="text-sm">查看全部</Anchor>
   </div>
   {

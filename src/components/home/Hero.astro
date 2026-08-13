@@ -1,55 +1,66 @@
 ---
 import { getConfigurationCollection } from "../../lib/utils";
 import Anchor from "../common/Anchor.astro";
-import ProfileFacts from "../ProfileFacts.astro";
 
 const { data: config } = await getConfigurationCollection();
 ---
 
-<div id="about" class="hero-grid py-12 sm:py-16 lg:py-20">
-  <div class="hero-portrait" aria-hidden={!config.hero.image}>
-    {
-      config.hero.image ? (
-        <img
-          src={config.hero.image}
-          alt={`${config.personal.name} 的头像`}
-          width="224"
-          height="224"
-          fetchpriority="high"
-        />
-      ) : (
-        <div class="hero-monogram" aria-hidden="true">
-          <span>{config.personal.initials}</span>
-        </div>
-      )
-    }
-  </div>
+<div id="about" class="hero-grid">
   <div class="hero-copy min-w-0">
-    <h1 class="hero-title font-display text-3xl leading-relaxed sm:text-5xl sm:leading-relaxed">
+    <h1 class="hero-title font-display">
       {config.hero.title}
     </h1>
-    <p class="hero-role mt-5 text-base font-bold leading-7 sm:text-lg">
-      {config.hero.subtitle}
-    </p>
-    <p class="mt-6 max-w-2xl font-serif text-lg leading-8 sm:text-xl sm:leading-9">
+    <div class="hero-identity">
+      <div class="hero-avatar">
+        {
+          config.hero.image ? (
+            <img
+              src={config.hero.image}
+              alt={`${config.personal.name} 的头像`}
+              width="72"
+              height="72"
+              fetchpriority="high"
+            />
+          ) : (
+            <span class="hero-monogram" aria-hidden="true">
+              {config.personal.initials}
+            </span>
+          )
+        }
+      </div>
+      <p class="hero-role">{config.hero.subtitle}</p>
+    </div>
+    <p class="hero-description font-body">
       {config.hero.description}
     </p>
-    <div class="mt-8 flex flex-wrap gap-4">
+    <div class="hero-actions">
       <Anchor
         url={config.hero.primaryCtaUrl}
         class="button-link button-link-primary"
         plain
       >
-        {config.hero.primaryCtaText}
+        <span>{config.hero.primaryCtaText}</span>
+        <span class="button-link-arrow" aria-hidden="true">→</span>
       </Anchor>
       <Anchor
         url={config.hero.secondaryCtaUrl}
         class="button-link button-link-secondary"
         plain
       >
-        {config.hero.secondaryCtaText}
+        <span>{config.hero.secondaryCtaText}</span>
+        <span class="button-link-arrow" aria-hidden="true">→</span>
       </Anchor>
     </div>
   </div>
-  <ProfileFacts />
+  <figure class="hero-city" aria-label="上海城市天际线像素插画">
+    <img
+      class="hero-city-art"
+      src="/shanghai-skyline.png"
+      alt="上海城市天际线、东方明珠与渡轮的像素插画"
+      width="1653"
+      height="951"
+      fetchpriority="high"
+    />
+  </figure>
 </div>
+<div class="hero-divider" aria-hidden="true"><span></span></div>

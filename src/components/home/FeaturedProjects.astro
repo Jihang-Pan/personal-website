@@ -4,20 +4,24 @@ import { getConfigurationCollection } from "../../lib/utils";
 import Anchor from "../common/Anchor.astro";
 import ProjectSnippet from "../ProjectSnippet.astro";
 
-type Props = { featuredProjects: Array<ProjectFrontmatter> };
+type Props = {
+  featuredProjects: Array<ProjectFrontmatter>;
+  headingLevel?: "h2" | "h3";
+};
 
-const { featuredProjects } = Astro.props;
+const { featuredProjects, headingLevel = "h2" } = Astro.props;
 const { data: config } = await getConfigurationCollection();
+const Heading = headingLevel;
 ---
 
 <section aria-labelledby="featured-projects-heading">
   <div class="flex items-baseline justify-between gap-4">
-    <h2
+    <Heading
       id="featured-projects-heading"
       class="section-tab"
     >
       {config.texts.projectsName}
-    </h2>
+    </Heading>
     <Anchor url="/projects" class="text-sm">{config.texts.viewAll}</Anchor>
   </div>
   {

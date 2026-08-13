@@ -33,7 +33,7 @@ description = "按主题浏览文章。"
 
 [_.aboutMeta]
 title = "关于我 — Jihang Pan"
-description = "认识 Jihang Pan，一名生活在上海的后端开发工程师。"
+description = "认识 Jihang Pan，一名生活在上海的程序猿。"
 longDescription = "关于我的工作、兴趣，以及这个网站记录的内容。"
 keywords = ["后端开发", "上海", "个人介绍"]
 
@@ -43,7 +43,7 @@ description = "这个页面不存在，或者已经被移动。"
 
 [_.hero]
 title = "Jihang Pan"
-subtitle = "后端开发工程师 / 上海"
+subtitle = "程序猿 / 上海"
 description = "你好，我是 Jihang Pan。这里记录我的写作、项目、日常与旅行。"
 image = "/jihang-avatar.png"
 primaryCtaText = "阅读文章"
@@ -54,10 +54,10 @@ secondaryCtaUrl = "/about"
 [_.personal]
 name = "Jihang Pan"
 initials = "JP"
-role = "后端开发工程师"
+role = "程序猿"
 location = "上海，中国"
 interests = ["看剧", "游戏", "记录"]
-bio = "我是一名生活在上海的后端开发工程师。工作之外，我喜欢看剧、打游戏，也习惯用文字记录思考、日常与旅途。"
+bio = "我是一名生活在上海的程序猿。工作之外，我喜欢看剧、打游戏，也习惯用文字记录思考、日常与旅途。"
 email = "panjihang96@gmail.com"
 githubProfile = "https://github.com/Jihang-Pan"
 

@@ -61,14 +61,28 @@ const travelArticles = articles
     <Section wide class="hero-section">
       <Hero />
     </Section>
-    <Section wide class="pb-16 sm:pb-24">
+    <Section wide class="home-feed pb-16 sm:pb-24">
+      <div class="home-section-heading">
+        <span class="home-heading-mark" aria-hidden="true"></span>
+        <h2>
+          <span>最近更新</span>
+          <span class="home-heading-slash" aria-hidden="true">/</span>
+          <span class="home-heading-latin">LATEST NOTES</span>
+        </h2>
+      </div>
       <div class="home-workbench zag-transition">
         <div class="home-primary-grid">
           <div class="home-panel home-panel-articles">
-            <FeaturedArticles featuredArticles={featuredArticles} />
+            <FeaturedArticles
+              featuredArticles={featuredArticles}
+              headingLevel="h3"
+            />
           </div>
           <div class="home-panel home-panel-projects">
-            <FeaturedProjects featuredProjects={featuredProjects} />
+            <FeaturedProjects
+              featuredProjects={featuredProjects}
+              headingLevel="h3"
+            />
           </div>
         </div>
         <div class="home-secondary-grid">
@@ -80,6 +94,7 @@ const travelArticles = articles
               articles={dailyArticles}
               emptyKicker="DAILY NOTES"
               emptyMessage="第一篇日常记录正在路上。"
+              headingLevel="h3"
             />
           </div>
           <div class="home-panel">
@@ -90,6 +105,7 @@ const travelArticles = articles
               articles={travelArticles}
               emptyKicker="TRAVEL NOTES"
               emptyMessage="第一篇旅游记录正在路上。"
+              headingLevel="h3"
             />
           </div>
         </div>
