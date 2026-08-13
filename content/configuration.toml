@@ -1,7 +1,7 @@
 # 上线前请把 baseUrl 替换为正式域名，并补充真实简介与社交账号。
 
 [_.site]
-baseUrl = "http://localhost:4321"
+baseUrl = "https://jihang-personal-website.pages.dev"
 language = "zh-CN"
 locale = "zh-CN"
 
