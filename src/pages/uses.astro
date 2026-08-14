@@ -1,0 +1,70 @@
+---
+import Anchor from "../components/common/Anchor.astro";
+import PageHeader from "../components/common/PageHeader.astro";
+import Section from "../components/common/Section.astro";
+import ProfileNav from "../components/ProfileNav.astro";
+import SEO from "../components/SEO.astro";
+import Layout from "../layouts/Layout.astro";
+import { getConfigurationCollection, processArticleDate } from "../lib/utils";
+
+const { data: config } = await getConfigurationCollection();
+---
+
+<Layout>
+  <Fragment slot="head">
+    <SEO
+      title={config.usesMeta.title}
+      description={config.usesMeta.longDescription ?? config.usesMeta.description}
+      canonicalPath="/uses"
+      image={config.usesMeta.cardImage}
+      tags={config.usesMeta.keywords}
+    />
+  </Fragment>
+  <Section wide class="pb-16 sm:pb-24">
+    <PageHeader title="设备与软件" description={config.usesMeta.longDescription} />
+    <ProfileNav />
+    <div class="profile-page-layout">
+      <div class="profile-page-intro">
+        <p>{config.uses.intro}</p>
+        <p class="profile-updated zag-muted">
+          最近更新：
+          <time datetime={config.uses.updatedAt.toISOString()}>
+            {processArticleDate(config.uses.updatedAt, config.site.locale)}
+          </time>
+        </p>
+      </div>
+
+      <div class="uses-groups">
+        {
+          config.uses.groups.map((group) => (
+            <section class="uses-group">
+              <header>
+                <h2>{group.title}</h2>
+                {group.description && <p>{group.description}</p>}
+              </header>
+              <dl class="uses-list">
+                {group.items.map((item) => (
+                  <div class="uses-item">
+                    <dt>
+                      {item.url ? (
+                        <Anchor
+                          url={item.url}
+                          external={!item.url.startsWith("/")}
+                        >
+                          {item.name}
+                        </Anchor>
+                      ) : (
+                        item.name
+                      )}
+                    </dt>
+                    <dd>{item.description}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+</Layout>

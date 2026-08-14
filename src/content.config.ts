@@ -11,6 +11,14 @@ const optionalImage = z
   )
   .optional();
 
+const optionalLink = z
+  .string()
+  .refine(
+    (value) => value.startsWith("/") || URL.canParse(value),
+    "链接必须是站内绝对路径或完整 URL",
+  )
+  .optional();
+
 const pageMetadata = z.object({
   title: z.string(),
   description: z.string(),
@@ -40,6 +48,9 @@ const configuration = defineCollection({
     archiveMeta: pageMetadata,
     tagMeta: pageMetadata,
     aboutMeta: pageMetadata,
+    nowMeta: pageMetadata,
+    usesMeta: pageMetadata,
+    resumeMeta: pageMetadata,
     notFoundMeta: pageMetadata,
     hero: z.object({
       title: z.string(),
@@ -86,6 +97,74 @@ const configuration = defineCollection({
         url: z.string(),
       }),
     ),
+    profileMenu: z.array(
+      z.object({
+        label: z.string(),
+        url: z.string(),
+      }),
+    ),
+    now: z.object({
+      updatedAt: z.coerce.date(),
+      intro: z.string(),
+      items: z.array(
+        z.object({
+          title: z.string(),
+          description: z.string(),
+          status: z.string().optional(),
+          url: optionalLink,
+        }),
+      ),
+    }),
+    uses: z.object({
+      updatedAt: z.coerce.date(),
+      intro: z.string(),
+      groups: z.array(
+        z.object({
+          title: z.string(),
+          description: z.string().optional(),
+          items: z.array(
+            z.object({
+              name: z.string(),
+              description: z.string(),
+              url: optionalLink,
+            }),
+          ),
+        }),
+      ),
+    }),
+    resume: z.object({
+      status: z.string().optional(),
+      targetRoles: z.array(z.string()),
+      summary: z.string(),
+      availability: z.string().optional(),
+      downloadUrl: optionalLink,
+      skills: z.array(
+        z.object({
+          title: z.string(),
+          items: z.array(z.string()),
+        }),
+      ),
+      experiences: z.array(
+        z.object({
+          organization: z.string(),
+          role: z.string(),
+          location: z.string().optional(),
+          start: z.string(),
+          end: z.string(),
+          description: z.string().optional(),
+          highlights: z.array(z.string()).default([]),
+        }),
+      ),
+      education: z.array(
+        z.object({
+          institution: z.string(),
+          degree: z.string(),
+          start: z.string().optional(),
+          end: z.string().optional(),
+          description: z.string().optional(),
+        }),
+      ),
+    }),
   }),
 });
 

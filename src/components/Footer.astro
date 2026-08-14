@@ -5,6 +5,12 @@ import Section from "./common/Section.astro";
 
 const { data: config } = await getConfigurationCollection();
 const year = new Date().getFullYear();
+const footerMenu = [
+  ...config.menu,
+  ...config.profileMenu.filter(
+    (item) => !config.menu.some((menuItem) => menuItem.url === item.url),
+  ),
+];
 ---
 
 <footer class="site-footer mt-auto">
@@ -39,7 +45,7 @@ const year = new Date().getFullYear();
         <p class="footer-heading">EXPLORE</p>
         <ul class="footer-menu-grid">
           {
-            config.menu.map((item) => (
+            footerMenu.map((item) => (
               <li><Anchor url={item.url}>{item.label}</Anchor></li>
             ))
           }

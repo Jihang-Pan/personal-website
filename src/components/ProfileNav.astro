@@ -1,0 +1,26 @@
+---
+import { getConfigurationCollection } from "../lib/utils";
+import Anchor from "./common/Anchor.astro";
+
+const { data: config } = await getConfigurationCollection();
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+---
+
+<nav class="profile-nav" aria-label="个人信息页面">
+  <ul>
+    {
+      config.profileMenu.map((item) => (
+        <li>
+          <Anchor
+            url={item.url}
+            class="profile-nav-link"
+            current={pathname === item.url}
+            plain
+          >
+            {item.label}
+          </Anchor>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

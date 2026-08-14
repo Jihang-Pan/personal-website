@@ -1,0 +1,61 @@
+---
+import Anchor from "../components/common/Anchor.astro";
+import PageHeader from "../components/common/PageHeader.astro";
+import Section from "../components/common/Section.astro";
+import ProfileNav from "../components/ProfileNav.astro";
+import SEO from "../components/SEO.astro";
+import Layout from "../layouts/Layout.astro";
+import { getConfigurationCollection, processArticleDate } from "../lib/utils";
+
+const { data: config } = await getConfigurationCollection();
+---
+
+<Layout>
+  <Fragment slot="head">
+    <SEO
+      title={config.nowMeta.title}
+      description={config.nowMeta.longDescription ?? config.nowMeta.description}
+      canonicalPath="/now"
+      image={config.nowMeta.cardImage}
+      tags={config.nowMeta.keywords}
+    />
+  </Fragment>
+  <Section wide class="pb-16 sm:pb-24">
+    <PageHeader title="最近在做什么" description={config.nowMeta.longDescription} />
+    <ProfileNav />
+    <div class="profile-page-layout">
+      <div class="profile-page-intro">
+        <p>{config.now.intro}</p>
+        <p class="profile-updated zag-muted">
+          最近更新：
+          <time datetime={config.now.updatedAt.toISOString()}>
+            {processArticleDate(config.now.updatedAt, config.site.locale)}
+          </time>
+        </p>
+      </div>
+
+      <ol class="now-list">
+        {
+          config.now.items.map((item) => (
+            <li class="now-item">
+              <div class="now-item-heading">
+                <h2>{item.title}</h2>
+                {item.status && <span class="profile-status">{item.status}</span>}
+              </div>
+              <p>{item.description}</p>
+              {item.url && (
+                <Anchor
+                  url={item.url}
+                  external={!item.url.startsWith("/")}
+                  class="mt-4"
+                >
+                  继续了解
+                </Anchor>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </Section>
+</Layout>

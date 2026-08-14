@@ -29,7 +29,7 @@ web
 ## Capabilities and Constraints
 
 - 保留现有 Astro、TypeScript、Tailwind CSS 和 Content Collections 技术底座。
-- 支持文章、项目、标签、归档、RSS、站点地图、明暗主题和响应式导航。
+- 支持文章、项目、标签、归档、RSS、站点地图、明暗主题、响应式导航，以及近况、设备与软件、网页简历页面。
 - 文章需要显式、稳定的 URL slug；中文标题不能导致空 slug。
 - 姓名、正式域名、头像、真实简介、社交账号和实际内容必须由用户确认或替换。
 

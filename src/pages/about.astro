@@ -3,6 +3,7 @@ import Anchor from "../components/common/Anchor.astro";
 import PageHeader from "../components/common/PageHeader.astro";
 import Section from "../components/common/Section.astro";
 import ProfileFacts from "../components/ProfileFacts.astro";
+import ProfileNav from "../components/ProfileNav.astro";
 import SEO from "../components/SEO.astro";
 import Layout from "../layouts/Layout.astro";
 import { getConfigurationCollection } from "../lib/utils";
@@ -24,6 +25,7 @@ const { data: config } = await getConfigurationCollection();
       title="关于我"
       description={config.aboutMeta.longDescription}
     />
+    <ProfileNav />
     <div class="about-layout py-10 sm:py-14">
       <div class="about-copy font-body text-lg leading-9">
         <p>你好，我是 {config.personal.name}。</p>

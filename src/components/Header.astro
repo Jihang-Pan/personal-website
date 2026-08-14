@@ -5,8 +5,10 @@ import ThemeToggle from "./ThemeToggle.astro";
 
 const { data: config } = await getConfigurationCollection();
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const profilePaths = new Set(config.profileMenu.map((item) => item.url));
 const isCurrent = (url: string) => {
   const normalized = url.replace(/\/$/, "") || "/";
+  if (normalized === "/about" && profilePaths.has(pathname)) return true;
   return normalized === "/"
     ? pathname === normalized
     : pathname === normalized || pathname.startsWith(`${normalized}/`);
