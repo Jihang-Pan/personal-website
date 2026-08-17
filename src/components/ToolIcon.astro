@@ -1,0 +1,71 @@
+---
+import apacheKafka from "../assets/tool-icons/apachekafka.svg?raw";
+import apacheMaven from "../assets/tool-icons/apachemaven.svg?raw";
+import apacheRocketMq from "../assets/tool-icons/apacherocketmq.svg?raw";
+import apple from "../assets/tool-icons/apple.svg?raw";
+import claude from "../assets/tool-icons/claude.svg?raw";
+import cursor from "../assets/tool-icons/cursor.svg?raw";
+import docker from "../assets/tool-icons/docker.svg?raw";
+import feishu from "../assets/tool-icons/feishu";
+import git from "../assets/tool-icons/git.svg?raw";
+import googleChrome from "../assets/tool-icons/googlechrome.svg?raw";
+import grafana from "../assets/tool-icons/grafana.svg?raw";
+import intellijIdea from "../assets/tool-icons/intellijidea.svg?raw";
+import linux from "../assets/tool-icons/linux.svg?raw";
+import mysql from "../assets/tool-icons/mysql.svg?raw";
+import obsidian from "../assets/tool-icons/obsidian.svg?raw";
+import openAi from "../assets/tool-icons/openai.svg?raw";
+import openJdk from "../assets/tool-icons/openjdk.svg?raw";
+import postman from "../assets/tool-icons/postman.svg?raw";
+import pyCharm from "../assets/tool-icons/pycharm.svg?raw";
+import redis from "../assets/tool-icons/redis.svg?raw";
+import springBoot from "../assets/tool-icons/springboot.svg?raw";
+import tidb from "../assets/tool-icons/tidb.svg?raw";
+
+type Props = { name: string };
+
+const icons: Record<string, string> = {
+  "Apache Kafka": apacheKafka,
+  "Apache Maven": apacheMaven,
+  "Apache RocketMQ": apacheRocketMq,
+  "Claude Code": claude,
+  Codex: openAi,
+  Cursor: cursor,
+  Docker: docker,
+  Git: git,
+  "Google Chrome": googleChrome,
+  Grafana: grafana,
+  "IntelliJ IDEA": intellijIdea,
+  Linux: linux,
+  Mac: apple,
+  MySQL: mysql,
+  Obsidian: obsidian,
+  OpenJDK: openJdk,
+  Postman: postman,
+  PyCharm: pyCharm,
+  Redis: redis,
+  "Spring Boot": springBoot,
+  TiDB: tidb,
+};
+
+const rasterIcons: Record<string, string> = {
+  飞书: feishu,
+};
+
+const { name }: Props = Astro.props;
+const markup = icons[name];
+const rasterSrc = rasterIcons[name];
+const fallback = Array.from(name || "?").slice(0, 2).join("").toUpperCase();
+---
+
+<span class="uses-icon" aria-hidden="true">
+  {
+    markup ? (
+      <Fragment set:html={markup} />
+    ) : rasterSrc ? (
+      <img src={rasterSrc} alt="" width="32" height="32" />
+    ) : (
+      <span class="uses-icon-fallback">{fallback}</span>
+    )
+  }
+</span>

@@ -1153,7 +1153,9 @@
 
   .uses-item {
     display: grid;
-    gap: 0.5rem;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: 1rem;
     padding-block: 1.25rem;
     border-block-start: 1px dashed var(--color-zag-dark-muted);
   }
@@ -1162,11 +1164,52 @@
     border-color: var(--color-zag-light-muted);
   }
 
-  .uses-item dt {
+  .uses-icon {
+    display: grid;
+    width: 3.5rem;
+    height: 3.5rem;
+    place-items: center;
+    border: 1px solid var(--color-zag-dark);
+    background: #fff;
+    color: var(--color-zag-dark);
+  }
+
+  .dark .uses-icon {
+    border-color: var(--color-zag-light);
+  }
+
+  .uses-icon svg,
+  .uses-icon img {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+  }
+
+  .uses-icon svg {
+    fill: currentColor;
+  }
+
+  .uses-icon img {
+    filter: grayscale(1) brightness(0);
+  }
+
+  .uses-icon-fallback {
+    font-family: var(--font-display);
+    font-size: 0.625rem;
+    line-height: 1;
+  }
+
+  .uses-item-copy {
+    min-width: 0;
+  }
+
+  .uses-item-copy dt {
     font-weight: 700;
   }
 
-  .uses-item dd {
+  .uses-item-copy dd {
+    margin-block-start: 0.4rem;
     font-family: var(--font-body);
     line-height: 1.75;
   }
@@ -1183,23 +1226,9 @@
   }
 
   .resume-hero h2 {
-    margin-block-start: 1.25rem;
     font-family: var(--font-display);
     font-size: clamp(1.75rem, 5vw, 3rem);
     line-height: 1.6;
-  }
-
-  .resume-targets {
-    margin-block-start: 0.5rem;
-    color: var(--color-zag-accent-light);
-    font-family: var(--font-body);
-    font-size: clamp(1.25rem, 3vw, 1.75rem);
-    font-weight: 700;
-    line-height: 1.5;
-  }
-
-  .dark .resume-targets {
-    color: var(--color-zag-accent-dark);
   }
 
   .resume-summary {
@@ -1240,19 +1269,6 @@
     line-height: 1.7;
   }
 
-  .resume-actions,
-  .resume-more-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding-block: 1.5rem;
-  }
-
-  .resume-actions button {
-    cursor: pointer;
-    text-align: start;
-  }
-
   .resume-sections {
     border-block-start: var(--zag-stroke) solid var(--color-zag-dark);
   }
@@ -1284,13 +1300,23 @@
     line-height: 1.5;
   }
 
-  .resume-page .resume-skill-grid p,
   .resume-page .resume-entry-heading p,
-  .resume-page .resume-entry-copy,
-  .resume-page .resume-more > p {
+  .resume-page .resume-entry-copy {
     margin-block-start: 0.5rem;
     font-family: var(--font-body);
     line-height: 1.8;
+  }
+
+  .resume-skill-list {
+    margin-block-start: 0.75rem;
+    padding-inline-start: 1.15rem;
+    font-family: var(--font-body);
+    line-height: 1.75;
+    list-style: square;
+  }
+
+  .resume-skill-list li + li {
+    margin-block-start: 0.5rem;
   }
 
   .resume-timeline {
@@ -1324,6 +1350,23 @@
     color: var(--color-zag-light-muted);
   }
 
+  .resume-technologies {
+    margin-block-start: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1.75;
+  }
+
+  .resume-technologies span {
+    margin-inline-end: 0.75rem;
+    color: var(--color-zag-accent-light);
+    font-weight: 700;
+  }
+
+  .dark .resume-technologies span {
+    color: var(--color-zag-accent-dark);
+  }
+
   .resume-highlights {
     margin-block-start: 1rem;
     padding-inline-start: 1.25rem;
@@ -1336,17 +1379,30 @@
     margin-block-start: 0.5rem;
   }
 
-  .resume-more > ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 1.5rem;
+  .resume-certifications {
     margin-block-start: 1.25rem;
+    padding-inline-start: 1.15rem;
+    font-family: var(--font-body);
+    line-height: 1.8;
+    list-style: square;
   }
 
   @media (min-width: 768px) {
-    .uses-item {
-      grid-template-columns: minmax(10rem, 0.7fr) minmax(0, 2fr);
-      gap: 2rem;
+    .uses-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .uses-item:nth-child(odd) {
+      padding-inline-end: 1.5rem;
+    }
+
+    .uses-item:nth-child(even) {
+      padding-inline-start: 1.5rem;
+      border-inline-start: 1px dashed var(--color-zag-dark-muted);
+    }
+
+    .dark .uses-item:nth-child(even) {
+      border-color: var(--color-zag-light-muted);
     }
 
     .resume-skill-grid {
@@ -1527,8 +1583,7 @@
     display: none;
   }
 
-  .profile-nav,
-  .print-hidden {
+  .profile-nav {
     display: none;
   }
 

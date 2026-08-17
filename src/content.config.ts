@@ -133,11 +133,9 @@ const configuration = defineCollection({
       ),
     }),
     resume: z.object({
-      status: z.string().optional(),
-      targetRoles: z.array(z.string()),
+      name: z.string(),
+      experienceYears: z.string().optional(),
       summary: z.string(),
-      availability: z.string().optional(),
-      downloadUrl: optionalLink,
       skills: z.array(
         z.object({
           title: z.string(),
@@ -152,6 +150,7 @@ const configuration = defineCollection({
           start: z.string(),
           end: z.string(),
           description: z.string().optional(),
+          technologies: z.array(z.string()).default([]),
           highlights: z.array(z.string()).default([]),
         }),
       ),
@@ -164,6 +163,7 @@ const configuration = defineCollection({
           description: z.string().optional(),
         }),
       ),
+      certifications: z.array(z.string()),
     }),
   }),
 });

@@ -5,15 +5,14 @@ import Section from "../components/common/Section.astro";
 import ProfileNav from "../components/ProfileNav.astro";
 import SEO from "../components/SEO.astro";
 import Layout from "../layouts/Layout.astro";
-import { getPublishedProjects } from "../lib/content";
 import { getConfigurationCollection } from "../lib/utils";
 
 const { data: config } = await getConfigurationCollection();
-const projects = (await getPublishedProjects()).slice(0, 3);
 const hasDetails =
   config.resume.skills.length > 0 ||
   config.resume.experiences.length > 0 ||
-  config.resume.education.length > 0;
+  config.resume.education.length > 0 ||
+  config.resume.certifications.length > 0;
 ---
 
 <Layout>
@@ -32,19 +31,16 @@ const hasDetails =
 
     <div class="resume-hero">
       <div>
-        {config.resume.status && <p class="profile-status w-fit">{config.resume.status}</p>}
-        <h2>{config.personal.name}</h2>
-        <p class="resume-targets">
-          {config.resume.targetRoles.length > 0
-            ? config.resume.targetRoles.join(" / ")
-            : config.personal.role}
-        </p>
+        <h2>{config.resume.name}</h2>
         <p class="resume-summary">{config.resume.summary}</p>
-        {config.resume.availability && (
-          <p class="mt-4 zag-muted">{config.resume.availability}</p>
-        )}
       </div>
       <dl class="resume-contact">
+        {config.resume.experienceYears && (
+          <div>
+            <dt>工作经验</dt>
+            <dd>{config.resume.experienceYears}</dd>
+          </div>
+        )}
         <div>
           <dt>所在地</dt>
           <dd>{config.personal.location}</dd>
@@ -64,22 +60,6 @@ const hasDetails =
       </dl>
     </div>
 
-    <div class="resume-actions print-hidden">
-      {config.resume.downloadUrl && (
-        <Anchor
-          url={config.resume.downloadUrl}
-          external={!config.resume.downloadUrl.startsWith("/")}
-          class="button-link button-link-primary"
-          plain
-        >
-          下载 PDF 简历
-        </Anchor>
-      )}
-      <button class="button-link button-link-secondary" type="button" data-print-resume>
-        打印 / 保存为 PDF
-      </button>
-    </div>
-
     {
       hasDetails && (
         <div class="resume-sections">
@@ -90,7 +70,9 @@ const hasDetails =
                 {config.resume.skills.map((group) => (
                   <div>
                     <h3>{group.title}</h3>
-                    <p>{group.items.join(" / ")}</p>
+                    <ul class="resume-skill-list">
+                      {group.items.map((item) => <li>{item}</li>)}
+                    </ul>
                   </div>
                 ))}
               </div>
@@ -111,6 +93,12 @@ const hasDetails =
                       <p>{experience.start} — {experience.end}</p>
                     </div>
                     {experience.description && <p class="resume-entry-copy">{experience.description}</p>}
+                    {experience.technologies.length > 0 && (
+                      <p class="resume-technologies">
+                        <span>技术栈</span>
+                        {experience.technologies.join(" / ")}
+                      </p>
+                    )}
                     {experience.highlights.length > 0 && (
                       <ul class="resume-highlights">
                         {experience.highlights.map((highlight) => <li>{highlight}</li>)}
@@ -143,30 +131,17 @@ const hasDetails =
               </ol>
             </section>
           )}
+
+          {config.resume.certifications.length > 0 && (
+            <section class="resume-section">
+              <h2>技能证书</h2>
+              <ul class="resume-certifications">
+                {config.resume.certifications.map((certification) => <li>{certification}</li>)}
+              </ul>
+            </section>
+          )}
         </div>
       )
     }
-
-    <section class="resume-section resume-more">
-      <h2>项目与写作</h2>
-      <p>项目记录展示我如何把想法落到具体实现，文章则保留过程中的判断与细节。</p>
-      {projects.length > 0 && (
-        <ul>
-          {projects.map((project) => (
-            <li><Anchor url={`/projects/${project.data.slug}`}>{project.data.title}</Anchor></li>
-          ))}
-        </ul>
-      )}
-      <div class="resume-more-links print-hidden">
-        <Anchor url="/projects">查看项目</Anchor>
-        <Anchor url="/blog">阅读文章</Anchor>
-      </div>
-    </section>
   </Section>
 </Layout>
-
-<script>
-  document.querySelector("[data-print-resume]")?.addEventListener("click", () => {
-    window.print();
-  });
-</script>

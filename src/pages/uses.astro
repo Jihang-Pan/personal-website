@@ -4,6 +4,7 @@ import PageHeader from "../components/common/PageHeader.astro";
 import Section from "../components/common/Section.astro";
 import ProfileNav from "../components/ProfileNav.astro";
 import SEO from "../components/SEO.astro";
+import ToolIcon from "../components/ToolIcon.astro";
 import Layout from "../layouts/Layout.astro";
 import { getConfigurationCollection, processArticleDate } from "../lib/utils";
 
@@ -45,19 +46,23 @@ const { data: config } = await getConfigurationCollection();
               <dl class="uses-list">
                 {group.items.map((item) => (
                   <div class="uses-item">
-                    <dt>
-                      {item.url ? (
-                        <Anchor
-                          url={item.url}
-                          external={!item.url.startsWith("/")}
-                        >
-                          {item.name}
-                        </Anchor>
-                      ) : (
-                        item.name
-                      )}
-                    </dt>
-                    <dd>{item.description}</dd>
+                    <ToolIcon name={item.name} />
+                    <div class="uses-item-copy">
+                      <dt>
+                        {item.url ? (
+                          <Anchor
+                            url={item.url}
+                            external={!item.url.startsWith("/")}
+                            showExternalIcon={false}
+                          >
+                            {item.name}
+                          </Anchor>
+                        ) : (
+                          item.name
+                        )}
+                      </dt>
+                      <dd>{item.description}</dd>
+                    </div>
                   </div>
                 ))}
               </dl>
